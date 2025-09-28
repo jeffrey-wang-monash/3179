@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Storm Events around Australia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <style>
+  :root { --bg:#0b1020; --ink:#e9eef7; }
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+  header{padding:10px 16px;text-align:center}
+  h1{font-size:18px;margin:0 0 4px}
+  #wrap{min-height:calc(100vh - 64px);display:grid;place-items:center;}
+  /* Make the chart fill the container */
+  #vis{width:100%; height:min(82vh, 900px); max-width:1200px; padding:6px 12px;}
+  </style>
+
+</head>
+<body>
+  <header>
+    <h1>Storm Events around Australia</h1>
+    <div>Boundary: ASGS 2021 (GDA94). Data: <code>stormarchive.csv</code>.</div>
+  </header>
+
+  <div id="wrap"><div id="vis"></div></div>
+
+<script>
+const spec = {
+  "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
+
+  /* Responsive sizing */
+  "width": "container",
+  "height": "container",
+  "autosize": {"type":"fit", "contains":"padding", "resize": true},  // VL/Vega autosize
+
+  /* Australian Albers; add a touch of scale for a tighter fit */
+  "projection": {
+    "type":"albers",
+    "parallels":[-18,-36],
+    "rotate":[-132,0,0],
+    "scale": 1650   // ↑ bump this (e.g., 1600–1800) to zoom a bit more if you like
+  },
+
+  "layer":[
+    /* (keep your country geoshape layer here) */
+    /* (keep your state borders layer here)  */
+    /* (keep your storm points layer here)   */
+  ],
+
+  "config": {
+    "background":"#0b1020",
+    "legend":{
+      "labelColor":"#ffffff",       // legend labels white
+      "titleColor":"#ffffff",       // legend title white
+      "labelFontSize": 14,
+      "titleFontSize": 16,
+      "symbolSize": 260
+    },
+    "view":{"stroke":null}
+  },
+
+  /* Australian Albers (EPSG:3577): parallels −18°, −36°, central meridian 132°E */
+  "projection": { "type":"albers", "parallels":[-18,-36], "rotate":[-132,0,0] },
+
+  "layer": [
+    /* 1) Australia polygon ONLY (white, visible on dark bg) */
+    {
+      "data": {
+        "url": "data/aus_2021_3.json",
+        "format": { "type":"topojson", "feature":"AUS_2021_AUST_GDA94" }
+      },
+      "transform": [
+        { "filter": "datum.properties && datum.properties.AUS_NAME21 == 'Australia'" }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "fill": "#ffffff",           /* white map */
+        "fillOpacity": 0.10,         /* tweak if you want brighter */
+        "stroke": "#ffffff",
+        "strokeWidth": 1.1
+      }
+    },
+
+    /* 2) State/Territory borders from the SAME file (white) */
+    {
+      "data": {
+        "url": "data/aus_2021_3.json",
+        "format": { "type":"topojson", "mesh":"STE_2021_AUST_GDA94" }
+      },
+      "mark": { "type":"geoshape", "stroke":"#ffffff", "strokeWidth":0.9, "fillOpacity":0 }
+    },
+
+    /* 3) Storm points */
+    {
+  "data": { "url": "data/stormarchive.csv" },
+  "transform": [
+    { "calculate":"toNumber(datum.Longitude)", "as":"lon" },
+    { "calculate":"toNumber(datum.Latitude)",  "as":"lat" },
+    { "filter":"isValid(datum.lon) && isValid(datum.lat)" },
+    { "filter":"datum.lon >= 110 && datum.lon <= 155 && datum.lat >= -45 && datum.lat <= -8" }
+  ],
+  "mark": { "type":"circle", "filled": true, "opacity": 0.9 },
+  "encoding": {
+    "longitude": { "field":"lon", "type":"quantitative" },
+    "latitude":  { "field":"lat", "type":"quantitative" },
+    "color":     { "field":"Database", "type":"nominal",
+                   "legend":{"title":"Event Type","labelFontSize":14,"titleFontSize":16,"symbolSize":260} },
+    "size": { "value": 48 },
+    "tooltip": [
+      { "field":"Database", "title": "Type" },
+      { "field":"Nearest town", "title":"Nearest town" },
+      { "field":"State" },
+      { "field":"properties.AUS_NAME21", "title":"Region" },
+      { "field":"Date/Time", "title":"Date/Time" },
+      { "field":"Latitude",  "type":"quantitative", "format":".3f" },
+      { "field":"Longitude", "type":"quantitative", "format":".3f" },
+      { "field":"Comments" }
+    ]
+  }
+}
+
+  ],
+
+  "config": { "background":"#0b1020", "view":{"stroke":null} }
+};
+vegaEmbed("#vis", spec, {actions:false});
+</script>
+</body>
+</html>
