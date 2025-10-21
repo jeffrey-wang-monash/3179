@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Storm Events around Australia — Infographics</title>
+  <title>Storm Events and Impacts in Australia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
@@ -23,10 +23,14 @@
     .sub{opacity:.9;margin:0 auto 10px;font-size:14px}
     
     .grid{display:grid;gap:18px;margin:18px auto}
+    .grid-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    @media (max-width: 800px) { .grid-two-col { grid-template-columns: 1fr; } }
+
     .card{background:var(--card);border:1px solid var(--divider);border-radius:16px;padding:18px 22px;}
     .card h2{font-size:18px;margin:4px 0 12px; border-bottom: 1px solid var(--divider); padding-bottom: 8px;}
     .vis{width:100%; height:75vh} 
     .smallvis{width:100%; height:400px}
+    .mediumvis{width:100%; height:500px}
     
     .prose{max-width:800px; margin:22px auto;}
     .prose h2{font-size:20px;}
@@ -39,10 +43,7 @@
         line-height: 1.7; 
         max-width: 800px;
     }
-    .explanation strong { 
-        color: var(--ink); 
-        font-weight: 600; 
-    }
+    .explanation strong { color: var(--ink); font-weight: 600; }
 
     footer{border-top:1px solid var(--divider);margin:24px auto 30px;padding-top:14px}
     .source{font-size:12px;opacity:.85}
@@ -52,56 +53,92 @@
 <body>
   <header class="hero wrap">
     <div class="eyebrow">FIT3179</div>
-    <h1>Understanding Severe Storms in Australia</h1>
-    <p class="sub">An interactive dashboard exploring severe storm events across the continent.</p>
+    <h1>Understanding Severe Storms & Weather Impacts in Australia</h1>
+    <p class="sub">An interactive dashboard exploring severe storm events and related hospital injuries.</p>
   </header>
 
   <main class="wrap">
     
     <section class="prose">
-        <h2>Why Study Storm Patterns?</h2>
+        <h2>Why Study Storm Patterns and Impacts?</h2>
         <p>
-            Severe weather events pose significant risks to communities and infrastructure. By analyzing historical storm data,
-            we can identify patterns and pinpoint areas that are most frequently affected. This knowledge is crucial for
-            developing targeted strategies for weather reinforcement, improving public safety, and building more resilient
-            communities. This dashboard provides an initial exploration into that data.
+            Severe weather events pose significant risks to communities and infrastructure, leading to injuries and hospitalizations. By analyzing historical storm data alongside health data, we can identify patterns, pinpoint affected areas and vulnerable populations. This knowledge is crucial for developing targeted strategies for prevention, weather reinforcement, improving public safety, and building more resilient communities. This dashboard provides an initial exploration into that data.
         </p>
     </section>
 
     <section class="grid">
       <article class="card">
-        <h2>Geographic Distribution of Storm Events</h2>
+        <h2>Geographic Distribution of Storm Events (BoM)</h2>
         <div id="map" class="vis"></div>
         <div class="explanation">
-          This map plots the location of every recorded storm event.
+          This map plots the location of every recorded storm event from the BoM archive. You can use the <strong>legend to filter</strong> by a specific event type.
           <br><br>
-          An immediate insight is the high concentration of events along the populous <strong>East and South-West coasts</strong>, which is highlighted with an annotation. This suggests a strong correlation between population density and the number of reported storms.
+          An immediate insight is the high concentration of events along the populous <strong>East and South-West coasts</strong>, highlighted with an annotation. This suggests a strong correlation between population density and the number of reported storms.
         </div>
       </article>
 
       <article class="card">
-        <h2>Which Events Are Most Common?</h2>
-        <div id="bars" class="smallvis"></div>
+        <h2>Event Type Breakdown by Region (BoM)</h2>
+        <div id="stateBreakdown" class="smallvis"></div>
         <div class="explanation">
-          This chart aggregates the total number of events by type. It clearly shows that <strong>heavy rain</strong> is the most frequently recorded severe weather event in the archive, occurring significantly more often than wind or hail. Lightning appears to be the least-reported event.
+          This chart shows the percentage breakdown of different storm event types from the BoM archive. Use the dropdown menu to see the composition for <strong>All States</strong> combined or filter to view the specific profile for an individual <strong>State/Territory</strong>.
         </div>
       </article>
 
+      <div class="grid-two-col">
+          <article class="card">
+            <h2>Weather Injury Hospitalisations Over Time (AIHW)</h2>
+            <div id="injuryTimeline" class="mediumvis"></div>
+            <div class="explanation">
+              This chart shows the number of hospitalisations due to extreme weather injuries from 2012-13 to 2021-22, broken down by the cause (Data: AIHW). <strong>Extreme heat</strong> is consistently the largest cause, followed by storms. Note the spike in heat-related injuries in 2013-14.
+            </div>
+          </article>
+
+          <article class="card">
+            <h2>Weather Injury Hospitalisations by State (AIHW)</h2>
+            <div id="injuryByState" class="mediumvis"></div>
+            <div class="explanation">
+              This chart compares total weather-related injury hospitalisations across states (2012-2022, Data: AIHW). <strong>QLD, NSW, and VIC</strong> recorded the highest numbers, likely influenced by population and exposure.
+            </div>
+          </article>
+      </div>
+
+       <div class="grid-two-col">
+          <article class="card">
+            <h2>Which Storm Events Are Most Common? (BoM)</h2>
+            <div id="bars" class="smallvis"></div>
+            <div class="explanation">
+              This chart aggregates BoM storm events by type. <strong>Heavy rain</strong> is the most frequent, occurring significantly more often than wind or hail. Lightning is the least reported.
+            </div>
+          </article>
+
+          <article class="card">
+            <h2>Storm Event Composition Over Time (BoM)</h2>
+             <div id="timeline" class="smallvis"></div>
+             <div class="explanation">
+              This timeline tracks the composition of severe storm events recorded each year (2010-2021, BoM). While totals fluctuate, <strong>Rain</strong> consistently forms the largest proportion. Note the relative increase in <strong>Wind</strong> reports in later years shown.
+            </div>
+          </article>
+      </div>
+
       <article class="card">
-        <h2>Are Storms Becoming More Frequent?</h2>
-        <div id="timeline" class="smallvis"></div>
-         <div class="explanation">
-          This timeline tracks the total number of severe storm events recorded each year from 2010 to 2021. The data reveals significant year-to-year fluctuation rather than a steady trend, typical of complex weather patterns. The period begins with one of the most active years, 2010, followed by a sharp decline to the lowest point in 2013. Afterward, event numbers climbed again, peaking in 2017 before trending downwards in the most recent years shown. The spike around 2017-2018 represents the most active period within the latter half of this dataset.
+        <h2>Incidence vs Mortality by Cause (Filtered by Year)</h2>
+        <div id="comparisonChart" class="mediumvis" style="height: 450px;"></div>
+        <div class="explanation">
+            Compares hospitalisations (left) and deaths (right) attributed to specific forces of nature for the selected financial year (Data: AIHW Tables H24 & D17). Use the dropdown to select a year. Note that small numbers ('c.p.', 'n.p.') are excluded. Causes are sorted by number within each chart.
         </div>
       </article>
+
     </section>
 
     <footer class="source">
       <span class="pill">Sources</span>
       <div style="margin-top:8px">
-        ABS: <em>ASGS 2021 digital boundary files</em>. data.gov.au listing.
-        BoM: <em>Severe Storms Archive</em>.
-        Projection notes: Vega/Vega-Lite docs & EPSG:3577.
+        ABS: <em>ASGS 2021 digital boundary files</em>.<br>
+        AIHW: <em>Extreme weather-related injury hospitalisations in Australia, 2012–13 to 2021–22</em>.<br>
+        BoM: <em>Severe Storms Archive</em>.<br>
+        Projection notes: Vega/Vega-Lite docs & EPSG:3577.<br>
+        Data visualisation done by Jeffrey Wang | Date: 21 October 2025
       </div>
     </footer>
   </main>
@@ -113,181 +150,295 @@ const sharedConfig = {
   legend: { labelColor:"#ffffff", titleColor:"#ffffff", labelFontSize:13, titleFontSize:15, symbolSize:220 },
   axis: { labelColor:"#e9eef7", titleColor:"#e9eef7", gridColor: "#26324a" },
   view: { stroke:null },
-  title: { color: "#ffffff", subtitleColor: "#c7cfda" },
+  title: { color: "#ffffff", subtitleColor: "#c7cfda", fontSize: 16, subtitleFontSize: 14 },
   text: { color: "#ffffff" }
 };
 
-// Define the custom color scheme once to reuse it
 const eventColorScale = {
   domain: ["Hail", "Lightning", "Rain", "Tornado", "Waterspout", "Wind"],
   range: ["#a6cee3", "#fee08b", "#1f78b4", "#888888", "#fdbf6f", "#33a02c"]
+};
+
+const injuryColorScale = {
+    domain: ["Extreme heat", "Extreme cold", "Storm", "Flood", "Bushfire"],
+    range: ["#d73027", "#4575b4", "#fee090", "#91bfdb", "#fc8d59"]
 };
 
 
 /* ============== MAP ============== */
 const mapSpec = {
   "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
-  width: "container",
-  height: "container",
-  autosize: {"type":"fit", "contains":"padding", "resize": true},
-  config: sharedConfig,
+  width: "container", height: "container", autosize: {"type":"fit", "contains":"padding", "resize": true}, config: sharedConfig,
   projection: { "type":"albers", "parallels":[-18,-36], "rotate": [-132, 0, 0] },
   layer: [
-    {
-      data: { "url":"data/aus_2021_3.json", "format":{"type":"topojson", "feature":"AUS_2021_AUST_GDA94"} },
-      mark:{ "type":"geoshape", "fill":"#ffffff", "fillOpacity":0.10, "stroke":"#ffffff", "strokeWidth":1.1 }
-    },
-    {
-      data: { "url":"data/aus_2021_3.json", "format":{"type":"topojson", "mesh":"STE_2021_AUST_GDA94"} },
-      mark:{ "type":"geoshape", "stroke":"#ffffff", "strokeWidth":0.9, "fillOpacity":0 }
-    },
-    {
-      data:{ "url":"data/stormarchive.csv" },
-      params: [
-        {
-          "name": "typeSel",
-          "select": { "type": "point", "fields": ["Database"] },
-          "bind": "legend",
-          "clear": "dblclick"
-        }
-      ],
+    { data: { "url":"data/aus_2021_3.json", "format":{"type":"topojson", "feature":"AUS_2021_AUST_GDA94"} },
+      mark:{ "type":"geoshape", "fill":"#ffffff", "fillOpacity":0.10, "stroke":"#ffffff", "strokeWidth":1.1 } },
+    { data: { "url":"data/aus_2021_3.json", "format":{"type":"topojson", "mesh":"STE_2021_AUST_GDA94"} },
+      mark:{ "type":"geoshape", "stroke":"#ffffff", "strokeWidth":0.9, "fillOpacity":0 } },
+    { data:{ "url":"data/stormarchive.csv" },
+      params: [ { "name": "typeSel", "select": { "type": "point", "fields": ["Database"] }, "bind": "legend", "clear": "dblclick" } ],
       transform:[
-        { "calculate":"toNumber(datum.Longitude)", "as":"lon"},
-        { "calculate":"toNumber(datum.Latitude)",  "as":"lat"},
-        { "filter":"isValid(datum.lon) && isValid(datum.lat)"},
-        { "filter":"datum.lon >= 110 && datum.lon <= 155 && datum.lat >= -45 && datum.lat <= -8"},
+        { "calculate":"toNumber(datum.Longitude)", "as":"lon"}, { "calculate":"toNumber(datum.Latitude)",  "as":"lat"},
+        { "filter":"isValid(datum.lon) && isValid(datum.lat)"}, { "filter":"datum.lon >= 110 && datum.lon <= 155 && datum.lat >= -45 && datum.lat <= -8"},
         { "filter": "length(data('typeSel_store')) == 0 || vlSelectionTest('typeSel_store', datum)"}
       ],
       mark:{ "type":"circle", "filled":true },
       encoding:{
-        "longitude":{"field":"lon", "type":"quantitative"},
-        "latitude":{"field":"lat", "type":"quantitative"},
-        "color":{ 
-          "field":"Database", "type":"nominal", "legend":{"title":"Event Type"}, "scale": eventColorScale
-        },
-        "size":{ "value":48 },
-        "opacity": { "value": 0.95 },
-        "tooltip":[
-          {"field":"Database", "title":"Type"},
-          {"field":"Nearest town", "title":"Nearest town"},
-          {"field":"State"},
-          {"field":"Date/Time", "title":"Date/Time"},
-          {"field":"Latitude", "type":"quantitative", "format":".3f"},
-          {"field":"Longitude", "type":"quantitative", "format":".3f"},
-          {"field":"Comments"}
-        ]
+        "longitude":{"field":"lon", "type":"quantitative"}, "latitude":{"field":"lat", "type":"quantitative"},
+        "color":{ "field":"Database", "type":"nominal", "legend":{"title":"BoM Event Type"}, "scale": eventColorScale },
+        "size":{ "value":48 }, "opacity": { "value": 0.95 },
+        "tooltip":[ {"field":"Database", "title":"Type"}, {"field":"Nearest town", "title":"Nearest town"}, {"field":"State"}, {"field":"Date/Time", "title":"Date/Time"}]
       }
     },
-    {
-      "data": { "values": [ {"lon": 150, "lat": -39, "note": "High event density\nalong East coast"} ] },
+    { "data": { "values": [ {"lon": 150, "lat": -39, "note": "High event density\nalong East coast"} ] },
       "mark": { "type": "text", "color": "#c7cfda", "fontStyle": "bold", "fontSize": 14, "align": "left", "lineBreak": "\n" },
-      "encoding": {
-        "longitude": {"field": "lon", "type": "quantitative"},
-        "latitude": {"field": "lat", "type": "quantitative"},
-        "text": {"field": "note"}
-      }
+      "encoding": { "longitude": {"field": "lon", "type": "quantitative"}, "latitude": {"field": "lat", "type": "quantitative"}, "text": {"field": "note"} }
     }
   ]
 };
 
-/* ============== CHART 1: Bar chart ============== */
+
+const injuryTimelineSpec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container", "height": "container", "autosize": {"type":"fit", "contains":"padding", "resize": true}, "config": sharedConfig,
+  "data": {
+    "url": "data/injury_table1.json" 
+  },
+  "transform": [
+    {"filter": "datum['Cause of hospitalisation'] != null && datum['Cause of hospitalisation'] != 'Total'"},
+    {"calculate": "replace(datum['Year'], '–', '-')", "as": "Year_Formatted"}
+  ],
+  "mark": "bar",
+  "encoding": {
+    "x": {"field": "Year_Formatted", "type": "ordinal", "title": "Financial Year"},
+    "y": {"field": "Number", "type": "quantitative", "title": "Number of  Hospitalisations"},
+    "color": { "field": "Cause of hospitalisation", "type": "nominal", "scale": injuryColorScale, "legend": {"title": "Cause"} },
+    "tooltip": [ {"field": "Year_Formatted", "title": "Year"}, {"field": "Cause of hospitalisation", "title": "Cause"}, {"field": "Number", "type": "quantitative", "format": ","} ]
+  }
+};
+
+const injuryByStateSpec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container", "height": "container", "autosize": {"type":"fit", "contains":"padding", "resize": true}, "config": sharedConfig,
+  "data": {
+    "url": "data/injury_table4.json"
+  },
+  "transform": [
+    {"filter": "datum['State/territory'] != null"},
+    {"filter": "datum['State/territory'] != 'Total' && datum['State/territory'] != 'Australia'"},
+    {"calculate": "datum['Number']", "as": "Total_Number"}
+  ],
+  "mark": "bar",
+  "encoding": {
+    "y": {"field": "State/territory", "type": "nominal", "sort":"-x", "title": "State / Territory"},
+    "x": {"field": "Total_Number", "type": "quantitative", "title": "Total Hospitalisations (2012-2022)"},
+     "color": {
+        "field": "State/territory",
+        "type": "nominal",      
+        "legend": null           
+     },
+    "tooltip": [ {"field": "State/territory", "title": "State/Territory"}, {"field": "Total_Number", "type": "quantitative", "title": "Total Hospitalisations", "format": ","} ]
+  }
+};
+
+
+/* ============== BAR CHART ============== */
 const barsSpec = {
   "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
-  width:"container", height:"container",
-  autosize:{type:"fit", "contains":"padding", "resize": true},
-  config: sharedConfig,
-  data:{ "url":"data/stormarchive.csv" },
-  layer: [
-    {
-      "encoding":{
-        "y":{ "field":"Database", "type":"nominal", "title":null, "sort":"-x" },
-        "x":{ "aggregate":"count", "type":"quantitative", "title":"Count" },
-        "tooltip":[ {"field":"Database", "title":"Event Type"}, {"aggregate":"count", "title":"Count"} ]
-      },
-      "layer": [
-        {
-          "mark": "bar",
-          "encoding": { "color":{ "field":"Database", "type":"nominal", "legend":null, "scale": eventColorScale } }
-        },
-        {
-          "mark": { "type": "text", "align": "left", "baseline": "middle", "dx": 3, "color": "#e9eef7"},
-          "encoding": { "text": { "aggregate": "count", "type": "quantitative", "format": "," } }
-        }
-      ]
-    },
-    {
-      "data": {"values": [{}]},
-      "mark": {
-        "type": "text",
-        "align": "right",
-        "x": "width",
-        "y": 200,
-        "dx": -100,
-        "fontSize": 16,
-        "fontStyle": "italic",
-        "color": "#e9eef7",
-        "lineBreak": "\n",
-        "text": "This chart shows the total count\nof storms for each event type."
-      }
-    }
+  "width":"container", "height":"container", "autosize":{"type":"fit", "contains":"padding", "resize": true}, "config": sharedConfig,
+  "data":{ "url":"data/stormarchive.csv" },
+  "encoding":{ "y":{ "field":"Database", "type":"nominal", "title":null, "sort":"-x" }, "x":{ "aggregate":"count", "type":"quantitative", "title":"Count" }, "tooltip":[ {"field":"Database", "title":"BoM Event Type"}, {"aggregate":"count", "title":"Count"} ] },
+  "layer": [
+    { "mark": "bar", "encoding": { "color":{ "field":"Database", "type":"nominal", "legend":null, "scale": eventColorScale } } },
+    { "mark": { "type": "text", "align": "left", "baseline": "middle", "dx": 3, "color": "#e9eef7"}, "encoding": { "text": { "aggregate": "count", "type": "quantitative", "format": "," } } }
   ]
 };
 
-/* ============== CHART 2: Timeline ============== */
+/* ============== STACKED AREA CHART ============== */
 const timeSpec = {
   "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
-  width:"container", height:"container",
-  autosize:{type:"fit", "contains":"padding", "resize": true},
-  config: sharedConfig,
+  "width":"container", "height":"container", "autosize":{"type":"fit", "contains":"padding", "resize": true}, "config": sharedConfig,
   "data": {
     "url": "data/stormarchive.csv",
-    "format": {
-      "type": "csv",
-      "parse": {"Date/Time": "date:'%d/%m/%Y %H:%M'"}
-    }
+    "format": { "type": "csv", "parse": {"Date/Time": "date:'%d/%m/%Y %H:%M'"}}
   },
-  layer: [
-    {
-      "transform": [
-        {"timeUnit": "year", "field": "Date/Time", "as": "year"}
-      ],
-      "encoding":{
-        "x":{ "field":"year", "type":"temporal", "title":"Year", "axis": {"format": "%Y"} },
-        "y":{ "aggregate":"count", "type":"quantitative", "title":"Events" },
-        "tooltip":[ {"field":"year", "type":"temporal", "title":"Year", "format": "%Y"}, {"aggregate":"count", "title":"Events"} ]
-      },
-      "layer": [
-        { "mark": {"type":"line", "color":"#9bd"} },
-        { "mark": {"type":"circle", "color":"#9bd", "size": 60} }
-      ]
+  "transform": [
+    {"filter": "time(datum['Date/Time']) > 0"},
+    {"timeUnit": "year", "field": "Date/Time", "as": "year"}
+  ],
+  "mark": "area",
+  "encoding":{
+    "x":{
+      "field":"year",
+      "type":"temporal",
+      "title":"Year",
+      "axis": {"format": "%Y"}
     },
-    {
-      transform: [
-        { "aggregate": [{"op": "count", "as": "total"}] },
-        { "calculate": "'Total Events: ' + format(datum.total, ',')", "as": "text_annotation" }
-      ],
-      "mark": {
-        "type": "text",
-        "align": "right",
-        "x": "width",
-        "y": 50,
-        "dx": -450,
-        "dy": 15,
-        "fontSize": 14,
-        "fontStyle": "italic",
-        "color": "#c7cfda"
-      },
-      "encoding": {
-        "text": {"field": "text_annotation", "type": "nominal"}
-      }
-    }
-  ]
+    "y":{
+      "aggregate":"count",
+      "type":"quantitative",
+      "title":"Number of Events",
+      "stack": "zero"
+    },
+    "color": {
+      "field": "Database",
+      "type": "nominal",
+      "scale": eventColorScale,
+      "legend": {"title": "BoM Event Type"}
+    },
+    "tooltip":[
+      {"field":"year", "type":"temporal", "title":"Year", "format": "%Y"},
+      {"field": "Database", "title": "Event Type"},
+      {"aggregate":"count", "title":"Events in Year"}
+    ]
+  }
 };
 
-/* Embed main visuals */
+/* ============== State Event Breakdown ============== */
+const stateBreakdownSpec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container", "height": 400,
+  "autosize": {"type":"fit", "contains":"padding", "resize": true},
+  "config": sharedConfig,
+  "data": {"url": "data/stormarchive.csv"},
+  "params": [{
+      "name": "stateSelect",
+      "value": null,
+      "bind": {
+        "input": "select",
+        "options": [ null, "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA" ],
+        "labels": [ "All States", "New South Wales", "Northern Territory", "Queensland", "South Australia", "Tasmania", "Victoria", "Western Australia" ],
+        "name": "Select State/Territory: "
+      }
+  }],
+  "transform": [
+    {"calculate": "trim(datum.Database)", "as": "Database_clean"},
+    {"filter": "datum.State != null && datum.State != ''"},
+    {"filter": "stateSelect == null || datum.State == stateSelect"},
+    {"calculate": "stateSelect == null ? 'All States' : stateSelect", "as": "SelectionLabel"}
+  ],
+  "mark": "bar",
+  "encoding": {
+    "x": { "aggregate": "count", "type": "quantitative", "stack": "normalize", "title": "Percentage of Events", "axis": {"format": "%"} },
+    "y": { "field": "SelectionLabel", "type": "nominal", "title": null, "axis": {"labels": false, "ticks": false, "domain": false} },
+    "color": { "field": "Database_clean", "type": "nominal", "scale": eventColorScale, "legend": {"title": "Event Type"} },
+    "tooltip": [ {"field": "Database_clean", "title": "Event Type"}, {"aggregate": "count", "title": "Count", "format": ","} ]
+  }
+};
+
+/* ============== Incidence vs Mortality ============== */
+const butterflySpec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "config": sharedConfig,
+  "params": [{
+      "name": "yearSelect",
+      "value": "2021-22",
+      "bind": {
+        "input": "select",
+        "options": ["2014-15", "2015-16", "2016-17", "2017-18", "2018-19", "2019-20", "2020-21", "2021-22", "2022-23", "2023-24"],
+        "name": "Select Financial Year: "
+      }
+  }],
+  "hconcat": [
+    // --- Left Chart: Hospitalisations ---
+    {
+      "width": 450, "height": 450,
+      "title": null,
+      "data": {
+        "url": "data/injury_h1_long.csv",
+        "format": {"type": "csv", "parse": {"Number": "number"}}
+      },
+      "transform": [
+        {"filter": "datum.Measure == 'Hospitalisations'"},
+        {"filter": "datum['Details of cause'] != 'Total' && datum['Details of cause'] != 'All forces of nature'"},
+        {"filter": "datum.Year == yearSelect"},
+        {"filter": "isValid(datum.Number) && isFinite(datum.Number)"}
+      ],
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "Details of cause", "type": "nominal", "title": "Cause",
+          "sort": {"field": "Number", "order": "descending"},
+          "axis": {
+              "offset": 5,
+              "ticks": false,
+              "domain": false,
+              "labels": true,
+              "labelFontSize": 14,
+              "labelFontWeight": "bold",
+              "labelAlign": "right",
+              "labelPadding": 5,
+            },
+        },
+        "x": {
+          "field": "Number", "type": "quantitative",
+          "sort": "descending",
+          "title": "Hospitalisations | Deaths",
+          "axis": {"format": ".0f", "grid": false}
+        },
+        "color": {
+          "datum": "Hospitalisations",
+          "title": "Measure",
+          "scale": {"domain": ["Hospitalisations", "Deaths"], "range": ["#fee08b", "#d73027"]},
+          "legend": {"orient": "top"}
+        },
+        "tooltip": [
+            {"field": "Year", "title": "Year"},
+            {"field": "Details of cause", "title": "Cause"},
+            {"field": "Number", "type": "quantitative", "format": ",", "title": "Hospitalisations"}
+         ]
+      }
+    },
+    // --- Right Chart: Deaths ---
+    {
+      "width": 450, "height": 450,
+      "title": null,
+      "data": {
+        "url": "data/mortality_d1_long.csv",
+        "format": {"type": "csv", "parse": {"Number": "number"}}
+      },
+      "transform": [
+        {"filter": "datum.Measure == 'Number of Injury Deaths'"},
+        {"filter": "datum['Details of cause'] != 'Total' && datum['Details of cause'] != 'All forces of nature'"},
+        {"filter": "datum.Year == yearSelect"},
+        {"filter": "isValid(datum.Number) && isFinite(datum.Number)"}
+      ],
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "Details of cause", "type": "nominal", "axis": null,
+          "sort": {"field": "Number", "order": "descending"},
+        },
+        "x": {
+          "field": "Number", "type": "quantitative",
+          "title": null,
+          "axis": {"format": ".0f", "grid": false}
+        },
+        "color": {
+          "datum": "Deaths",
+          "scale": {"domain": ["Hospitalisations", "Deaths"], "range": ["#fee08b", "#d73027"]},
+          "legend": null
+        },
+         "tooltip": [
+            {"field": "Year", "title": "Year"},
+            {"field": "Details of cause", "title": "Cause"},
+            {"field": "Number", "type": "quantitative", "format": ",", "title": "Deaths"}
+          ]
+      }
+    }
+  ],
+  "resolve": {"scale": {"y": "shared"}},
+  "spacing": 5
+};
+
+// --- Embed section ---
 vegaEmbed("#map", mapSpec, {actions:false});
+vegaEmbed("#injuryTimeline", injuryTimelineSpec, {actions:false});
+vegaEmbed("#injuryByState", injuryByStateSpec, {actions:false});
 vegaEmbed("#bars", barsSpec, {actions:false});
 vegaEmbed("#timeline", timeSpec, {actions:false});
+vegaEmbed("#stateBreakdown", stateBreakdownSpec, {actions:false});
+vegaEmbed("#comparisonChart", butterflySpec, {actions:false});
 
 </script>
 </body>
