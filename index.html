@@ -342,7 +342,7 @@ const butterflySpec = {
   "hconcat": [
     // --- Left Chart: Hospitalisations ---
     {
-      "width": 450, "height": 450,
+      "width": 550, "height": 450,
       "title": null,
       "data": {
         "url": "data/injury_h1_long.csv",
@@ -374,7 +374,8 @@ const butterflySpec = {
           "field": "Number", "type": "quantitative",
           "sort": "descending",
           "title": "Hospitalisations | Deaths",
-          "axis": {"format": ".0f", "grid": false}
+          "axis": {"format": ".0f", "grid": false},
+          "scale": {"domain": [0, 600]}
         },
         "color": {
           "datum": "Hospitalisations",
@@ -391,7 +392,7 @@ const butterflySpec = {
     },
     // --- Right Chart: Deaths ---
     {
-      "width": 450, "height": 450,
+      "width": 350, "height": 450,
       "title": null,
       "data": {
         "url": "data/mortality_d1_long.csv",
@@ -412,7 +413,8 @@ const butterflySpec = {
         "x": {
           "field": "Number", "type": "quantitative",
           "title": null,
-          "axis": {"format": ".0f", "grid": false}
+          "axis": {"format": ".0f", "grid": false},
+          "scale": {"domain": [0, 600]}
         },
         "color": {
           "datum": "Deaths",
